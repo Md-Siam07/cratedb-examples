@@ -9,8 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
-    name: ' PHP: ${{ matrix.php-version }} CrateDB: ${{ matrix.cratedb-version }}
-      on ${{ matrix.os }}'
+    name:
+      " PHP: ${{ matrix.php-version }} CrateDB: ${{ matrix.cratedb-version }}
+      on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     services:
       cratedb:
@@ -33,14 +34,14 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'requirements.txt
+          cache-dependency-path: "requirements.txt
 
-            '
-          python-version: '3.11'
+            "
+          python-version: "3.11"
       - name: Install utilities
-        run: 'pip install -r requirements.txt
+        run: "pip install -r requirements.txt
 
-          '
+          "
       - id: measurement-4
         name: Record Measurement After Install utilities
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -54,9 +55,9 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: composer
       - name: Validate by-language/php-amphp
-        run: 'ngr test by-language/php-amphp
+        run: "ngr test by-language/php-amphp
 
-          '
+          "
       - id: measurement-7
         name: Record Measurement After Validate by-language/php-amphp
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -75,8 +76,8 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption15
+          path: total_energy_consumption15.json
     strategy:
       fail-fast: false
       matrix:
@@ -85,6 +86,6 @@ jobs:
         os:
           - ubuntu-latest
         php-version:
-          - '8.1'
-          - '8.2'
-          - '8.3'
+          - "8.1"
+          - "8.2"
+          - "8.3"

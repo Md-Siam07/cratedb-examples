@@ -20,13 +20,13 @@ jobs:
       - name: Acquire sources
         uses: actions/checkout@v4
       - name: Validate framework/flink/kafka-jdbcsink-java
-        run: '# TODO: Generalize invocation into `ngr` test runner.
+        run: "# TODO: Generalize invocation into `ngr` test runner.
 
           cd framework/flink/kafka-jdbcsink-java
 
           bash test.sh
 
-          '
+          "
       - id: measurement-3
         name: Record Measurement After Validate framework/flink/kafka-jdbcsink-java
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -45,8 +45,8 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption8
+          path: total_energy_consumption8.json
     strategy:
       fail-fast: true
       matrix:

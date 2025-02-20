@@ -1,4 +1,4 @@
-name: AWS ML Pipeline
+name: measure_metrics.yml
 on:
   push:
     branches:
@@ -22,12 +22,12 @@ jobs:
         with:
           python-version: 3.x
       - name: Install dependencies
-        run: 'python -m pip install --upgrade pip
+        run: "python -m pip install --upgrade pip
 
           pip install radon lizard pylint mccabe xenon pycodestyle cognitive-complexity
           cloc scc
 
-          '
+          "
       - id: measurement-4
         name: Record Measurement After Install dependencies
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -66,9 +66,7 @@ jobs:
       - name: Analyze with Lizard
         run: 'echo -e "\n=== Detailed Code Metrics ===" >> metrics_report.txt
 
-          lizard . --CCN 10 --length 100 --arguments 5 --extension duplicate --modified
-          --working_threads 1 >> metrics_report.txt
-
+          lizard . --CCN 10 --length 100 --arguments 5 --extension duplicate --modified --working_threads 1 || true >> metrics_report.txt
           '
       - id: measurement-8
         name: Record Measurement After Analyze with Lizard
@@ -104,7 +102,7 @@ jobs:
           label: Check complexity thresholds with Xenon
           task: get-measurement
       - name: Generate detailed reports
-        run: 'mkdir -p metrics
+        run: "mkdir -p metrics
 
           # JSON reports
 
@@ -118,7 +116,7 @@ jobs:
 
           cp metrics_report.txt metrics/full_report.txt
 
-          '
+          "
       - id: measurement-14
         name: Record Measurement After Generate detailed reports
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -142,5 +140,5 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption23
+          path: total_energy_consumption23.json

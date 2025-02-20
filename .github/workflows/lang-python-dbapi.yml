@@ -9,8 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
-    name: ' Python: ${{ matrix.python-version }} CrateDB: ${{ matrix.cratedb-version
-      }} on ${{ matrix.os }}'
+    name:
+      " Python: ${{ matrix.python-version }} CrateDB: ${{ matrix.cratedb-version
+      }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     services:
       cratedb:
@@ -33,20 +34,20 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'requirements.txt
+          cache-dependency-path: "requirements.txt
 
             by-language/python-dbapi/requirements.txt
 
             by-language/python-dbapi/requirements-dev.txt
 
-            '
+            "
           python-version: ${{ matrix.python-version }}
       - name: Install uv
         uses: astral-sh/setup-uv@v5
       - name: Install utilities
-        run: 'uv pip install --system -r requirements.txt
+        run: "uv pip install --system -r requirements.txt
 
-          '
+          "
       - id: measurement-5
         name: Record Measurement After Install utilities
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -55,9 +56,9 @@ jobs:
           label: Install utilities
           task: get-measurement
       - name: Validate by-language/python-dbapi
-        run: 'ngr test --accept-no-venv by-language/python-dbapi
+        run: "ngr test --accept-no-venv by-language/python-dbapi
 
-          '
+          "
       - id: measurement-7
         name: Record Measurement After Validate by-language/python-dbapi
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -76,8 +77,8 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption17
+          path: total_energy_consumption17.json
     strategy:
       fail-fast: false
       matrix:
@@ -86,5 +87,5 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.7'
-          - '3.13'
+          - "3.7"
+          - "3.13"

@@ -9,8 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
-    name: ' Java: ${{ matrix.java-version }} CrateDB: ${{ matrix.cratedb-version }}
-      on ${{ matrix.os }}'
+    name:
+      " Java: ${{ matrix.java-version }} CrateDB: ${{ matrix.cratedb-version }}
+      on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     services:
       cratedb:
@@ -33,14 +34,14 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'requirements.txt
+          cache-dependency-path: "requirements.txt
 
-            '
-          python-version: '3.11'
+            "
+          python-version: "3.11"
       - name: Install utilities
-        run: 'pip install -r requirements.txt
+        run: "pip install -r requirements.txt
 
-          '
+          "
       - id: measurement-4
         name: Record Measurement After Install utilities
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -55,9 +56,9 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
       - name: Validate by-language/java-jdbc
-        run: 'ngr test by-language/java-jdbc
+        run: "ngr test by-language/java-jdbc
 
-          '
+          "
       - id: measurement-7
         name: Record Measurement After Validate by-language/java-jdbc
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -66,9 +67,9 @@ jobs:
           label: Validate by-language/java-jdbc
           task: get-measurement
       - name: Validate by-language/java-qa
-        run: 'ngr test by-language/java-qa
+        run: "ngr test by-language/java-qa
 
-          '
+          "
       - id: measurement-9
         name: Record Measurement After Validate by-language/java-qa
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -87,16 +88,16 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption13
+          path: total_energy_consumption13.json
     strategy:
       fail-fast: false
       matrix:
         cratedb-version:
           - nightly
         java-version:
-          - '11'
-          - '17'
-          - '21'
+          - "11"
+          - "17"
+          - "21"
         os:
           - ubuntu-latest

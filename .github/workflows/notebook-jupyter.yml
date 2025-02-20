@@ -13,8 +13,9 @@ jobs:
       OS_TYPE: ${{ matrix.os }}
       PYTHON_VERSION: ${{ matrix.python-version }}
       UV_SYSTEM_PYTHON: true
-    name: ' Python: ${{ matrix.python-version }} CrateDB: ${{ matrix.cratedb-version
-      }} on ${{ matrix.os }}'
+    name:
+      " Python: ${{ matrix.python-version }} CrateDB: ${{ matrix.cratedb-version
+      }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     services:
       cratedb:
@@ -37,23 +38,23 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'notebook/jupyter/pyproject.toml
+          cache-dependency-path: "notebook/jupyter/pyproject.toml
 
-            '
+            "
           python-version: ${{ matrix.python-version }}
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
         with:
-          cache-dependency-glob: 'notebook/jupyter/pyproject.toml
+          cache-dependency-glob: "notebook/jupyter/pyproject.toml
 
-            '
+            "
           cache-suffix: ${{ matrix.python-version }}
           enable-cache: true
           version: latest
       - name: Install project
-        run: 'uv pip install notebook/jupyter[all]
+        run: "uv pip install notebook/jupyter[all]
 
-          '
+          "
       - id: measurement-5
         name: Record Measurement After Install project
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -62,11 +63,11 @@ jobs:
           label: Install project
           task: get-measurement
       - name: Validate notebook/jupyter
-        run: 'cd notebook/jupyter
+        run: "cd notebook/jupyter
 
           pytest
 
-          '
+          "
       - id: measurement-7
         name: Record Measurement After Validate notebook/jupyter
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -75,7 +76,7 @@ jobs:
           label: Validate notebook/jupyter
           task: get-measurement
       - name: Build docs for notebook/jupyter
-        run: 'cd notebook/jupyter
+        run: "cd notebook/jupyter
 
           poe check
 
@@ -83,7 +84,7 @@ jobs:
 
           poe docs-linkcheck
 
-          '
+          "
       - id: measurement-9
         name: Record Measurement After Build docs for notebook/jupyter
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -102,8 +103,8 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption28
+          path: total_energy_consumption28.json
     strategy:
       fail-fast: false
       matrix:
@@ -112,5 +113,5 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-          - '3.8'
-          - '3.13'
+          - "3.8"
+          - "3.13"

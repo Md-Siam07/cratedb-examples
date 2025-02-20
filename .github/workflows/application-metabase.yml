@@ -9,7 +9,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
-    name: ' CrateDB: ${{ matrix.cratedb-version }} on ${{ matrix.os }}'
+    name: " CrateDB: ${{ matrix.cratedb-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     steps:
       - name: Start Energy Measurement
@@ -24,22 +24,22 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'pyproject.toml
+          cache-dependency-path: "pyproject.toml
 
             requirements.txt
 
             requirements-test.txt
 
-            '
+            "
           python-version: ${{ matrix.python-version }}
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
           version: latest
       - name: Install utilities
-        run: 'uv pip install --system -r requirements.txt
+        run: "uv pip install --system -r requirements.txt
 
-          '
+          "
       - id: measurement-5
         name: Record Measurement After Install utilities
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -48,9 +48,9 @@ jobs:
           label: Install utilities
           task: get-measurement
       - name: Validate application/metabase
-        run: 'ngr test --accept-no-venv application/metabase
+        run: "ngr test --accept-no-venv application/metabase
 
-          '
+          "
       - id: measurement-7
         name: Record Measurement After Validate application/metabase
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -69,8 +69,8 @@ jobs:
       - name: Upload Energy Consumption Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: total-energy-consumption
-          path: total_energy_consumption.json
+          name: total-energy-consumption3
+          path: total_energy_consumption3.json
     strategy:
       fail-fast: false
       matrix:
@@ -79,4 +79,4 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.12'
+          - "3.12"
