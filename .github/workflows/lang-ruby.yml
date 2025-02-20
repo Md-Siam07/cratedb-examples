@@ -1,82 +1,103 @@
-name: Ruby
-
+name: lang-ruby.yml
 on:
-  pull_request:
-    branches: ~
-    paths:
-    - '.github/workflows/lang-ruby.yml'
-    - 'by-language/ruby/**'
-    - '/requirements.txt'
   push:
-    branches: [ main ]
-    paths:
-    - '.github/workflows/lang-ruby.yml'
-    - 'by-language/ruby/**'
-    - '/requirements.txt'
+    branches:
+      - main
 
-  # Allow job to be triggered manually.
-  workflow_dispatch:
-
-  # Run job each night after CrateDB nightly has been published.
-  schedule:
-    - cron: '0 3 * * *'
-
-# Cancel in-progress jobs when pushing to the same branch.
 concurrency:
   cancel-in-progress: true
   group: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   test:
-    name: "
-     Ruby: ${{ matrix.ruby-version }}
-     CrateDB: ${{ matrix.cratedb-version }}
-     on ${{ matrix.os }}"
+    name: ' Ruby: ${{ matrix.ruby-version }} CrateDB: ${{ matrix.cratedb-version }}
+      on ${{ matrix.os }}'
     runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ 'ubuntu-latest' ]
-        ruby-version: [ '2.7', '3.0', '3.1', '3.2', 'truffleruby', 'truffleruby+graalvm' ]
-        cratedb-version: [ 'nightly' ]
-
     services:
       cratedb:
+        env:
+          CRATE_HEAP_SIZE: 4g
         image: crate/crate:${{ matrix.cratedb-version }}
         ports:
           - 4200:4200
           - 5432:5432
-        env:
-          CRATE_HEAP_SIZE: 4g
-
     steps:
-
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          task: start-measurement
       - name: Acquire sources
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
           architecture: x64
-          cache: 'pip'
-          cache-dependency-path: |
-            requirements.txt
+          cache: pip
+          cache-dependency-path: 'requirements.txt
 
+            '
+          python-version: '3.11'
       - name: Install utilities
-        run: |
-          pip install -r requirements.txt
+        run: 'pip install -r requirements.txt
 
+          '
+      - id: measurement-4
+        name: Record Measurement After Install utilities
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          label: Install utilities
+          task: get-measurement
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "${{ matrix.ruby-version }}"
           bundler-cache: true
-
-      - name: Install "libpq-dev"
-        if: ${{ matrix.ruby-version == 'jruby' }}
+          ruby-version: ${{ matrix.ruby-version }}
+      - if: ${{ matrix.ruby-version == 'jruby' }}
+        name: Install "libpq-dev"
         run: sudo apt-get update && sudo apt-get install --yes build-essential libpq-dev
-
+      - id: measurement-7
+        name: Record Measurement After Install "libpq-dev"
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          label: Install "libpq-dev"
+          task: get-measurement
       - name: Validate by-language/ruby
-        run: |
-          ngr test by-language/ruby
+        run: 'ngr test by-language/ruby
+
+          '
+      - id: measurement-9
+        name: Record Measurement After Validate by-language/ruby
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          label: Validate by-language/ruby
+          task: get-measurement
+      - id: display-measurement
+        name: Display Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          task: display-results
+      - name: Save Total Energy Consumption Data
+        run: echo '${{ steps.final-measurement.outputs.data-total-json }}' > total_energy_consumption.json
+      - name: Upload Energy Consumption Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: total-energy-consumption
+          path: total_energy_consumption.json
+    strategy:
+      fail-fast: false
+      matrix:
+        cratedb-version:
+          - nightly
+        os:
+          - ubuntu-latest
+        ruby-version:
+          - '2.7'
+          - '3.0'
+          - '3.1'
+          - '3.2'
+          - truffleruby
+          - truffleruby+graalvm

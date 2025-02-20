@@ -1,49 +1,54 @@
-name: "Apache Flink: Kafka to JDBC sink (Java)"
-
+name: framework-flink-kafka-java.yml
 on:
-  pull_request:
-    branches: ~
-    paths:
-    - '.github/workflows/framework-flink-kafka-java.yml'
-    - 'framework/flink/kafka-jdbcsink-java/**'
-    - '/requirements.txt'
   push:
-    branches: [ main ]
-    paths:
-    - '.github/workflows/framework-flink-kafka-java.yml'
-    - 'framework/flink/kafka-jdbcsink-java/**'
-    - '/requirements.txt'
+    branches:
+      - main
 
-  # Allow job to be triggered manually.
-  workflow_dispatch:
-
-  # Run job each night after CrateDB nightly has been published.
-  schedule:
-    - cron: '0 3 * * *'
-
-# Cancel in-progress jobs when pushing to the same branch.
 concurrency:
   cancel-in-progress: true
   group: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
-
   test:
+    name: OS ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    steps:
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          task: start-measurement
+      - name: Acquire sources
+        uses: actions/checkout@v4
+      - name: Validate framework/flink/kafka-jdbcsink-java
+        run: '# TODO: Generalize invocation into `ngr` test runner.
 
+          cd framework/flink/kafka-jdbcsink-java
+
+          bash test.sh
+
+          '
+      - id: measurement-3
+        name: Record Measurement After Validate framework/flink/kafka-jdbcsink-java
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          label: Validate framework/flink/kafka-jdbcsink-java
+          task: get-measurement
+      - id: display-measurement
+        name: Display Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v4
+        with:
+          json-output: true
+          task: display-results
+      - name: Save Total Energy Consumption Data
+        run: echo '${{ steps.final-measurement.outputs.data-total-json }}' > total_energy_consumption.json
+      - name: Upload Energy Consumption Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: total-energy-consumption
+          path: total_energy_consumption.json
     strategy:
       fail-fast: true
       matrix:
-        os: [ "ubuntu-latest" ]
-
-    name: OS ${{ matrix.os }}
-    steps:
-
-      - name: Acquire sources
-        uses: actions/checkout@v4
-
-      - name: Validate framework/flink/kafka-jdbcsink-java
-        run: |
-          # TODO: Generalize invocation into `ngr` test runner.
-          cd framework/flink/kafka-jdbcsink-java
-          bash test.sh
+        os:
+          - ubuntu-latest
