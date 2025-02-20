@@ -9,8 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   test:
-    name: ' Superset: ${{ matrix.superset-version }} Python: ${{ matrix.python-version
-      }} CrateDB: ${{ matrix.cratedb-version }} on ${{ matrix.os }}'
+    name:
+      " Superset: ${{ matrix.superset-version }} Python: ${{ matrix.python-version
+      }} CrateDB: ${{ matrix.cratedb-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     services:
       cratedb:
@@ -33,18 +34,18 @@ jobs:
         with:
           architecture: x64
           cache: pip
-          cache-dependency-path: 'pyproject.toml
+          cache-dependency-path: "pyproject.toml
 
             requirements.txt
 
             requirements-test.txt
 
-            '
+            "
           python-version: ${{ matrix.python-version }}
       - name: Install utilities
-        run: 'pip install -r requirements.txt
+        run: "pip install -r requirements.txt
 
-          '
+          "
       - id: measurement-4
         name: Record Measurement After Install utilities
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -53,11 +54,12 @@ jobs:
           label: Install utilities
           task: get-measurement
       - name: Install Apache Superset ${{ matrix.superset-version }}
-        run: 'pip install ''apache-superset==${{ matrix.superset-version }}''
+        run: "pip install 'apache-superset==${{ matrix.superset-version }}'
 
-          '
+          "
       - id: measurement-6
-        name: Record Measurement After Install Apache Superset ${{ matrix.superset-version
+        name:
+          Record Measurement After Install Apache Superset ${{ matrix.superset-version
           }}
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
         with:
@@ -65,9 +67,8 @@ jobs:
           label: Install Apache Superset ${{ matrix.superset-version }}
           task: get-measurement
       - name: Validate application/apache-superset
-        run: 'ngr test --accept-no-venv application/apache-superset
-
-          '
+        run: |
+          ngr test --accept-no-venv application/apache-superset
       - id: measurement-8
         name: Record Measurement After Validate application/apache-superset
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
@@ -96,8 +97,8 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.9'
-          - '3.11'
+          - "3.9"
+          - "3.11"
         superset-version:
           - 3.*
           - 4.*

@@ -56,9 +56,8 @@ jobs:
           label: Install utilities
           task: get-measurement
       - name: Validate topic/machine-learning/llama-index
-        run: "ngr test --accept-no-venv topic/machine-learning/llama-index
-
-          "
+        run: |
+          ngr test --accept-no-venv topic/machine-learning/llama-index
       - id: measurement-6
         name: Record Measurement After Validate topic/machine-learning/llama-index
         uses: green-coding-solutions/eco-ci-energy-estimation@v4

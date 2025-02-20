@@ -48,11 +48,9 @@ jobs:
           label: Install utilities
           task: get-measurement
       - name: Validate testing/native/python-{pytest,unittest}
-        run: "ngr test --accept-no-venv testing/native/python-pytest
-
+        run: |
+          ngr test --accept-no-venv testing/native/python-pytest
           ngr test --accept-no-venv testing/native/python-unittest
-
-          "
       - id: measurement-6
         name: Record Measurement After Validate testing/native/python-{pytest,unittest}
         uses: green-coding-solutions/eco-ci-energy-estimation@v4
